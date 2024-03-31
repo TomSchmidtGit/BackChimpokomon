@@ -86,7 +86,6 @@ class ChimpokodexController extends AbstractController
     public function createChimpokodex(Request $request,  SerializerInterface $serializer, EntityManagerInterface $manager, UrlGeneratorInterface $urlGenerator, ChimpokodexRepository $repository, ValidatorInterface $validator, TagAwareCacheInterface $cache): JsonResponse
     {
         $chimpokodex = $serializer->deserialize($request->getContent(), Chimpokodex::class,"json");
-        // Cette ligne récupère le contenu Json mis en body de la requete (en désérialisant le contenu de la requête) et le place dans la variable chimpokomon.
 
         $dateNow = new \DateTime();
 

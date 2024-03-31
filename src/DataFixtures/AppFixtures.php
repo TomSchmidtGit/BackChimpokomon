@@ -69,7 +69,6 @@ class AppFixtures extends Fixture
 
         $users = [];
 
-        //Set Public User
         $publicUser = new User();
         $publicUser->setUsername("public");
         $publicUser->setRoles(["PUBLIC"]);
@@ -91,7 +90,6 @@ class AppFixtures extends Fixture
             $users[] = $userUser;
         }
         
-            // Admins
         $adminUser = new User();
         $adminUser->setUsername("admin");
         $adminUser->setRoles(["ADMIN"]);
@@ -102,12 +100,12 @@ class AppFixtures extends Fixture
 
         $chimpokodexEntries = [];
         for ($i=0; $i < 151; $i++) { 
-            //Instantiate new Chimpokodex Entity to Fullfill
+
             $chimpokodex = new Chimpokodex();
-            //Handle created && updated datetime
+
             $created = $this->faker->dateTimeBetween("-1 week", "now");
             $updated = $this->faker->dateTimeBetween($created, "now");
-            //Asign Properties to Entity
+
             $chimpokodex
             ->setName($this->faker->word())
             ->setPvMax($this->faker->numberBetween(1,100))
@@ -115,9 +113,8 @@ class AppFixtures extends Fixture
             ->setUpdatedAt($updated)
             ->setStatus($this->faker->randomElement(['ON','OFF']));
             
-            //stock Chimpokodex Entry
             $chimpokodexEntries[] = $chimpokodex;
-            //Add to transaction
+
             $manager->persist($chimpokodex);
         }
 
