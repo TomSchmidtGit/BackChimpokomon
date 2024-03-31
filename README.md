@@ -12,16 +12,17 @@ sudo apt update
 sudo apt upgrade
 ```
 
-### Lancer le service Apache2 :
+### Mise en place :
 
-(Penser à le fermer après utilisation)
+Lancer le service Apache2 (penser à le fermer après utilisation), se positionner dans le bon dossier puis lancer le serveur
 ```bash
 sudo service apache2 start
-```
-
-### Se positionner dans le bon dossier puis lancer le serveur :
-
-```bash
 cd chemin/vers/votre/projet
 symfony serve
 ```
+
+Le serveur se lancera sur le port 8000 du localhost.
+
+### Documentation :
+
+Les routes de l'API sont consultables une fois le serveur lancé via http://localhost:8000/api/doc
