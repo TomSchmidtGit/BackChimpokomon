@@ -43,14 +43,4 @@ class ChimpokodexRepository extends ServiceEntityRepository
         ->getQuery()
         ->getResult();
    }
-
-//    public function findOneBySomeField($value): ?Chimpokodex
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }

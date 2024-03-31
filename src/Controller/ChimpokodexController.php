@@ -3,7 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Chimpokodex;
-use Doctrine\ORM\Mapping\Id;
+use OpenApi\Attributes as OA;
+use Nelmio\ApiDocBundle\Annotation\Model;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ChimpokodexRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,21 +19,34 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ChimpokodexController extends AbstractController
 {
+
     /**
-     * Renvoie tous les Chimpokomon du Chimpokedex
-     * 
+     * Renvoie toutes les entrées Chimokomons du Chimpokodex
+     *
+     * @param ChimpokodexRepository $repository
+     * @param SerializerInterface $serializer
+     * @param TagAwareCacheInterface $cache
      * @return JsonResponse
      */
+    #[OA\Response(
+        response:200,
+        description: "Retourne la liste des chimpokomons",
+        content: new OA\JsonContent(
+            type: "array",
+            items: new OA\Items(ref: new Model(type:Chimpokodex::class))
+        )
+    )]
     #[Route('/api/chimpokodex', name: 'chimpokodex.getAll', methods: ['GET'])]
+    #[IsGranted("IS_AUTHENTICATED_FULLY")]
     public function getAllChimpokodex(ChimpokodexRepository $repository,  SerializerInterface $serializer, TagAwareCacheInterface $cache): JsonResponse
     {
         $idCache = 'getAllChimpokodex';
         $jsonChimpokodex = $cache->get($idCache, function (ItemInterface $item) use ($repository, $serializer) {
 
-            // echo "MISE EN CACHE";
             $item->tag("chimpokodexCache");
             $chimpokodexs = $repository->findAllByStatus('ON');
             return $serializer->serialize($chimpokodexs, 'json', ['groups' => "getAllWithinEvolutions"]);
@@ -142,21 +156,6 @@ class ChimpokodexController extends AbstractController
         return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
     }
 
-    // #[Route('/api/chimpokodex/{id}', name: 'chimpokodex.delete', methods: ['DELETE'])]
-    // /**
-    //  * Supprimer un Chimpo (on préfèrera changer le status plutot que de supprimer)
-    //  *
-    //  * @param Chimpokodex $chimpokodex
-    //  * @param EntityManagerInterface $entityManager
-    //  * @return JsonResponse
-    //  */
-    // public function deleteChimpokodex(Chimpokodex $chimpokodex, EntityManagerInterface $entityManager): JsonResponse
-    // {
-    //     $entityManager->remove($chimpokodex);
-    //     $entityManager->flush();
-
-    //     return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
-    // }
     
     #[Route('/api/chimpokodex/{id}', name: 'chimpokodex.softdelete', methods: ['DELETE'])]
     /**
@@ -181,6 +180,9 @@ class ChimpokodexController extends AbstractController
         }
 
         $entityManager->flush();
+
+        $cache->invalidateTags(["chimpokodexCache"]);
+        
         return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
      
     }
