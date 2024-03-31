@@ -1,6 +1,6 @@
 ## Configuration de l'environnement
 
-Avant de démarrer le projet, assurez-vous que votre système est à jour et que les services nécessaires sont configurés et en cours d'exécution (Php, Apache2).
+Avant de démarrer le projet, assurez-vous que votre système est à jour et que les services nécessaires sont configurés et en cours d'exécution (Php, Apache2 et Symfony notamment).
 
 Voici les étapes à suivre :
 
@@ -18,6 +18,15 @@ Lancer le service Apache2 (penser à le fermer après utilisation), se positionn
 ```bash
 sudo service apache2 start
 cd chemin/vers/votre/projet
+```
+Mettre en place la BDD : 
+```bash
+php bin/console d:d:c
+php bin/console doctrine:fixture:load
+```
+
+Lancer le serveur : 
+```bash
 symfony serve
 ```
 
